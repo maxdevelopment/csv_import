@@ -1,0 +1,8 @@
+parameters:
+    product.headers:
+        code: 'Product Code'
+        name: 'Product Name'
+        description: 'Product Description'
+        stock: 'Stock'
+        price: 'Cost in GBP'
+        discontinued: 'Discontinued'
