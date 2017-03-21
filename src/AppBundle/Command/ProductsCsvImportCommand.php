@@ -45,7 +45,8 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
                 );
             }
             $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
-            $workflow = new ProductWorkflow($csvReader, $entityManager);
+            $headers = $this->getContainer()->getParameter('product.headers');
+            $workflow = new ProductWorkflow($csvReader, $entityManager, $headers);
             $workflow->temporary();
         }
     }

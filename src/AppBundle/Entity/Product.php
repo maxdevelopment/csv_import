@@ -69,6 +69,8 @@ class Product
      * @var \DateTime
      *
      * @ORM\Column(name="stmTimeStamp", type="datetime", options={"default": 0})
+     *
+     * @ORM\Version
      */
     private $timeStamp;
 
