@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use AppBundle\Workflow\ProductWorkflow;
+use AppBundle\Writer\ProductWriter;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -46,9 +47,21 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
             }
             $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
             $headers = $this->getContainer()->getParameter('product.headers');
-            $workflow = new ProductWorkflow($csvReader, $entityManager, $headers);
-            $workflow->temporary();
+            $productWorkflow = new ProductWorkflow($csvReader, $entityManager, $headers);
+            $productWriter = $this->setWriter($entityManager, $isTest);
+
+            $result = $productWorkflow->runWorkflow($output, $productWriter);
+
+
         }
+    }
+
+    protected function setWriter($entityManager, $isTest)
+    {
+        $writer = new ProductWriter($entityManager, 'AppBundle:Product');
+        $validator = $this->getContainer()->get('validator');
+        $writer->setParameters($validator, $isTest);
+        return $writer;
     }
 
 }
