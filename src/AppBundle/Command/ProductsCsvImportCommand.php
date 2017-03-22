@@ -2,9 +2,6 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\Workflow\ProductWorkflow;
-use AppBundle\Writer\ProductWriter;
-use AppBundle\Writer\NewProductWriter;
 use AppBundle\Helpers\CsvImportLogger;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -46,19 +43,14 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
                     '[test mode] without database writer'
                 );
             }
-            $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
-            $headers = $this->getContainer()->getParameter('product.headers');
-            $productWorkflow = new ProductWorkflow($csvReader, $entityManager, $headers);
-            $productWriter = $this->setWriter($entityManager, $isTest);
-
-            $result = $productWorkflow->runWorkflow($output, $productWriter);
-//            $result = $productWorkflow->temporary($productWriter);
-
-
-            $newProductWriter = $this->getContainer()->get('app.new_product_writer');
-            var_dump($newProductWriter->getEntityName());
-
-
+            $productWorkflow = $this->getContainer()->get('app.product_workflow');
+            $productWorkflow->setReader($csvReader);
+            
+            $productWriter = $this->getContainer()->get('app.product_writer');
+            $productWriter->setTest($isTest);
+            
+            $result = $productWorkflow->runWorkflow($productWriter);
+            
             $productWriter->flush();
 
             $logger = new CsvImportLogger($output);
@@ -71,13 +63,4 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
             $output->writeln($csvValidator->getMessage());
         }
     }
-
-    protected function setWriter($entityManager, $isTest)
-    {
-        $writer = new ProductWriter($entityManager, 'AppBundle:Product');
-        $validator = $this->getContainer()->get('validator');
-        $writer->setParameters($validator, $isTest);
-        return $writer;
-    }
-
 }

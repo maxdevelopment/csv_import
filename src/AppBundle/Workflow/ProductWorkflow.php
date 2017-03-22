@@ -2,59 +2,36 @@
 
 namespace AppBundle\Workflow;
 
+use Doctrine\ORM\EntityManager;
 use Ddeboer\DataImport\Workflow;
-use Ddeboer\DataImport\Writer\DoctrineWriter;
 use Ddeboer\DataImport\ItemConverter\MappingItemConverter;
 use Ddeboer\DataImport\ItemConverter\CallbackItemConverter;
-use Doctrine\ORM\EntityManager;
-
 use Exception;
-use Symfony\Component\Console\Output\OutputInterface;
 
-
-class ProductWorkflow extends Workflow
+class ProductWorkflow
 {
-    protected $reader;
+    protected $workflow;
     protected $entityManager;
     protected $headers;
-
-    public function __construct($reader, EntityManager $entityManager, $headers)
+    
+    public function __construct(EntityManager $entityManager, $headers)
     {
-        parent::__construct($reader);
-        $this->reader = $reader;
         $this->entityManager = $entityManager;
         $this->headers = $headers;
     }
+    
+    public function setReader($reader)
+    {
+        $this->workflow = new Workflow($reader);
+    }
 
-//    public function temporary($wrt)
-//    {
-//        $doctrineWriter = new DoctrineWriter($this->entityManager, 'AppBundle:Product');
-//
-//        /* headers and data converters */
-//        try {
-//            $em = $this->entityManager;
-//            $em->getConnection()->beginTransaction();
-//            $result = $this
-//                ->addItemConverter(self::getMapper($this->headers))
-//                ->addItemConverter(self::getValueConverter())
-//                ->addWriter($doctrineWriter)
-//                ->process();
-//            $em->getConnection()->commit();
-//        } catch (Exception $e) {
-//            echo 'Exception CALLED';
-//            $em->getConnection()->rollBack();
-//            throw $e;
-//        }
-//        return $result;
-//    }
-
-    public function runWorkflow(OutputInterface $logOutput, $writer)
+    public function runWorkflow($writer)
     {
 
         $em = $this->entityManager;
         $em->getConnection()->beginTransaction();
         try {
-            $result = $this
+            $result = $this->workflow
                 ->addItemConverter(self::getMapper($this->headers))
                 ->addItemConverter(self::getValueConverter())
                 ->addWriter($writer)

@@ -6,28 +6,35 @@ use AppBundle\Entity\Product;
 use Ddeboer\DataImport\Writer\DoctrineWriter;
 use Doctrine\ORM\EntityManager;
 
-/**
- * Class PersistEntities
- *
- * @package AppBundle\Helpers
- */
 class ProductWriter extends DoctrineWriter
 {
+    protected $entityManager;
+    protected $entityName;
     protected $validator;
     protected $test;
     protected $errors;
     protected $correct;
-
-//    public function __construct(EntityManager $entityManager, $entityName)
-//    {
-//        parent::__construct($entityManager, $entityName);
-//    }
-
-    public function setParameters($validator, $test)
+    
+    public function __construct(EntityManager $entityManager, $entityName, $validator)
     {
+        parent::__construct($entityManager, $entityName);
+        $this->entityManager = $entityManager;
+        $this->entityName = $entityName;
         $this->validator = $validator;
-        $this->test = $test;
-        $this->prepare();
+    }
+    
+    public function setTest($state)
+    {
+        if (is_bool($state)) {
+            $this->test = $state;
+            return;
+        }
+        throw new \Exception(sprintf('Not boolean value [%s]', __CLASS__ . ' function: ' . __FUNCTION__));
+    }
+    
+    public function isTest()
+    {
+        return $this->test;
     }
     
     public function prepare()
@@ -38,7 +45,6 @@ class ProductWriter extends DoctrineWriter
     
     public function addCorrectProduct(Product $product)
     {
-//        var_dump($product->getProductCode());
         $this->correct[$product->getProductCode()] = $product;
     }
     
@@ -49,7 +55,6 @@ class ProductWriter extends DoctrineWriter
     
     public function addError($error)
     {
-//        var_dump($error);
         $this->errors[] = $error;
     }
     
@@ -81,5 +86,4 @@ class ProductWriter extends DoctrineWriter
             $em->flush();
         }
     }
-    
 }
