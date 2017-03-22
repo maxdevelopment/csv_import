@@ -3,7 +3,7 @@
 namespace AppBundle\Workflow;
 
 use Ddeboer\DataImport\Workflow;
-//use Ddeboer\DataImport\Writer\DoctrineWriter;
+use Ddeboer\DataImport\Writer\DoctrineWriter;
 use Ddeboer\DataImport\ItemConverter\MappingItemConverter;
 use Ddeboer\DataImport\ItemConverter\CallbackItemConverter;
 use Doctrine\ORM\EntityManager;
@@ -25,6 +25,28 @@ class ProductWorkflow extends Workflow
         $this->entityManager = $entityManager;
         $this->headers = $headers;
     }
+
+//    public function temporary($wrt)
+//    {
+//        $doctrineWriter = new DoctrineWriter($this->entityManager, 'AppBundle:Product');
+//
+//        /* headers and data converters */
+//        try {
+//            $em = $this->entityManager;
+//            $em->getConnection()->beginTransaction();
+//            $result = $this
+//                ->addItemConverter(self::getMapper($this->headers))
+//                ->addItemConverter(self::getValueConverter())
+//                ->addWriter($doctrineWriter)
+//                ->process();
+//            $em->getConnection()->commit();
+//        } catch (Exception $e) {
+//            echo 'Exception CALLED';
+//            $em->getConnection()->rollBack();
+//            throw $e;
+//        }
+//        return $result;
+//    }
 
     public function runWorkflow(OutputInterface $logOutput, $writer)
     {

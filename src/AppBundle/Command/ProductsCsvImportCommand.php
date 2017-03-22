@@ -4,6 +4,8 @@ namespace AppBundle\Command;
 
 use AppBundle\Workflow\ProductWorkflow;
 use AppBundle\Writer\ProductWriter;
+use AppBundle\Writer\NewProductWriter;
+use AppBundle\Helpers\CsvImportLogger;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,8 +25,7 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
             ->setName('products:csv-import')
             ->setDescription('Import products from CSV file to DB')
             ->addArgument('file_path', InputArgument::REQUIRED, 'Valid .csv file for import')
-            ->addOption('test', null, InputOption::VALUE_NONE, 'Test .csv import without DB insert')
-        ;
+            ->addOption('test', null, InputOption::VALUE_NONE, 'Test .csv import without DB insert');
     }
 
     /**
@@ -51,8 +52,23 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
             $productWriter = $this->setWriter($entityManager, $isTest);
 
             $result = $productWorkflow->runWorkflow($output, $productWriter);
+//            $result = $productWorkflow->temporary($productWriter);
 
 
+            $newProductWriter = $this->getContainer()->get('app.new_product_writer');
+            var_dump($newProductWriter->getEntityName());
+
+
+            $productWriter->flush();
+
+            $logger = new CsvImportLogger($output);
+            $logger->logWork(
+                $result->getSuccessCount(),
+                $csvReader->getErrors(),
+                $productWriter->getErrors()
+            );
+        } else {
+            $output->writeln($csvValidator->getMessage());
         }
     }
 

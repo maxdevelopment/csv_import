@@ -10,3 +10,6 @@ services:
     app.csv_validator:
           class: AppBundle\Helpers\CsvValidator
           arguments: ["%product.headers%"]
+    app.new_product_writer:
+          class: AppBundle\Writer\NewProductWriter
+          arguments: ['@doctrine.orm.entity_manager', '%product.entity%']

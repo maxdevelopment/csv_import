@@ -6,3 +6,4 @@ parameters:
         stock: 'Stock'
         price: 'Cost in GBP'
         discontinued: 'Discontinued'
+    product.entity: 'AppBundle:Product'

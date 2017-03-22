@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraints as ProductAssert;
 
 /**
  * Product
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="tblProductData")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
  * @UniqueEntity("productCode")
+ * @ProductAssert\PriceStockLess(minPrice = 5, minStock = 10)
  */
 class Product
 {
@@ -54,7 +56,7 @@ class Product
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dtmAdded", type="datetime", nullable=true)
+     * @ORM\Column(name="dtmAdded", type="datetime", nullable=true, options={"default": 0})
      */
     private $added;
 
@@ -70,7 +72,6 @@ class Product
      *
      * @ORM\Column(name="stmTimeStamp", type="datetime", options={"default": 0})
      *
-     * @ORM\Version
      */
     private $timeStamp;
 
@@ -85,8 +86,19 @@ class Product
      * @var float
      *
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
+     *
+     * @Assert\LessThanOrEqual(1000)
      */
     private $price;
+
+    /**
+     * Product constructor.
+     */
+    public function __construct()
+    {
+        $this->added = new \DateTime;
+        $this->timeStamp = new \DateTime;
+    }
 
 
     /**
