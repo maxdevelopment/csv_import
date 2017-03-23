@@ -2,8 +2,6 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\Helpers\CsvImportLogger;
-
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,26 +32,24 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $logger = $this->getContainer()->get('app.csv_import_logger');
+        $logger->setIO($output, $input);
+
         $csvValidator = $this->getContainer()->get('app.csv_validator');
         $csvReader = $csvValidator->validate($input->getArgument('file_path'));
         if ($csvValidator->isValid()) {
             $isTest = $input->getOption('test');
-            if ($isTest) {
-                $output->writeln(
-                    '[test mode] without database writer'
-                );
-            }
+            if ($isTest)
+                $logger->setTestMode();
             $productWorkflow = $this->getContainer()->get('app.product_workflow');
             $productWorkflow->setReader($csvReader);
-            
+
             $productWriter = $this->getContainer()->get('app.product_writer');
             $productWriter->setTest($isTest);
-            
+
             $result = $productWorkflow->runWorkflow($productWriter);
-            
             $productWriter->flush();
 
-            $logger = new CsvImportLogger($output);
             $logger->logWork(
                 $result->getSuccessCount(),
                 $csvReader->getErrors(),
