@@ -70,7 +70,7 @@ class Product
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="stmTimeStamp", type="datetime", options={"default": 0})
+     * @ORM\Column(name="stmTimestamp", type="datetime", options={"default": 0})
      *
      */
     private $timeStamp;
