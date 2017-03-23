@@ -12,19 +12,19 @@ class CsvValidator
      * @bool
      */
     protected $valid;
-
+    
     /**
      * Error message
      * @string
      */
     protected $message;
-
+    
     /**
      * Array of CSV file headers
      * @array
      */
     protected $headers;
-
+    
     /**
      * CsvValidator constructor.
      * @param array $headers
@@ -35,7 +35,7 @@ class CsvValidator
         $this->message = '';
         $this->headers = $headers;
     }
-
+    
     /**
      * @param $filePath
      * @return CsvReader|null
@@ -50,7 +50,7 @@ class CsvValidator
         }
         return null;
     }
-
+    
     /**
      * @param $filePath
      * @return bool
@@ -64,7 +64,7 @@ class CsvValidator
         }
         return $this->isValid();
     }
-
+    
     /**
      * @param $filePath
      * @return CsvReader
@@ -74,10 +74,10 @@ class CsvValidator
         $file = new \SplFileObject($filePath);
         $csvReader = new CsvReader($file);
         $csvReader->setHeaderRowNumber(0);
-
+        
         return $csvReader;
     }
-
+    
     /**
      * @param $reader
      * @return bool
@@ -85,21 +85,29 @@ class CsvValidator
     public function headersValidation($reader)
     {
         $csvHeaders = $reader->getColumnHeaders();
-        foreach ($this->headers as $header) {
-            if (!in_array($header, $csvHeaders))
+        foreach ($csvHeaders as $header) {
+            if (!in_array($header, $this->headers))
                 $this->valid = false;
         }
-        if(!$this->valid)
+        if (!$this->valid)
             $this->message = 'csv file have incorrect headers';
-
+        
         return $this->isValid();
     }
-
+    
     /**
      * @return boolean
      */
     public function isValid()
     {
         return $this->valid;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }
