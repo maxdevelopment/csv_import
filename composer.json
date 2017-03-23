@@ -9,7 +9,8 @@
     },
     "require": {
         "php": ">=5.5.9",
-        "ddeboer/data-import-bundle": "~0.1",
+        "ddeboer/data-import": "0.18.0",
+        "ddeboer/data-import-bundle": "0.1.0",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/doctrine-migrations-bundle": "^1.2",
         "doctrine/orm": "^2.4.8",
