@@ -14,7 +14,13 @@ class ProductWriter extends DoctrineWriter
     protected $test;
     protected $errors;
     protected $correct;
-    
+
+    /**
+     * ProductWriter constructor.
+     * @param EntityManager $entityManager
+     * @param string $entityName
+     * @param array|null|string $validator
+     */
     public function __construct(EntityManager $entityManager, $entityName, $validator)
     {
         parent::__construct($entityManager, $entityName);
@@ -22,7 +28,7 @@ class ProductWriter extends DoctrineWriter
         $this->entityName = $entityName;
         $this->validator = $validator;
     }
-    
+
     public function setTest($state)
     {
         if (is_bool($state)) {
@@ -31,38 +37,38 @@ class ProductWriter extends DoctrineWriter
         }
         throw new \Exception(sprintf('Not boolean value [%s]', __CLASS__ . ' function: ' . __FUNCTION__));
     }
-    
+
     public function isTest()
     {
         return $this->test;
     }
-    
+
     public function prepare()
     {
         $this->errors = [];
         $this->correct = [];
     }
-    
+
     public function addCorrectProduct(Product $product)
     {
         $this->correct[$product->getProductCode()] = $product;
     }
-    
+
     public function getCorrect()
     {
         return $this->correct;
     }
-    
+
     public function addError($error)
     {
         $this->errors[] = $error;
     }
-    
+
     public function getErrors()
     {
         return $this->errors;
     }
-    
+
     public function writeItem(array $item)
     {
         $entity = $this->findOrCreateItem($item);
@@ -75,7 +81,7 @@ class ProductWriter extends DoctrineWriter
             $this->addError($item);
         }
     }
-    
+
     public function flush()
     {
         if (!$this->test) {

@@ -13,18 +13,31 @@ class ProductWorkflow
     protected $workflow;
     protected $entityManager;
     protected $headers;
-    
+
+    /**
+     * ProductWorkflow constructor.
+     * @param EntityManager $entityManager
+     * @param $headers
+     */
     public function __construct(EntityManager $entityManager, $headers)
     {
         $this->entityManager = $entityManager;
         $this->headers = $headers;
     }
-    
+
+    /**
+     * @param $reader
+     */
     public function setReader($reader)
     {
         $this->workflow = new Workflow($reader);
     }
 
+    /**
+     * @param $writer
+     * @return mixed
+     * @throws Exception
+     */
     public function runWorkflow($writer)
     {
 
@@ -44,6 +57,10 @@ class ProductWorkflow
         return $result;
     }
 
+    /**
+     * @param $headers
+     * @return MappingItemConverter
+     */
     public static function getMapper($headers)
     {
         $converter = new MappingItemConverter();
@@ -57,6 +74,9 @@ class ProductWorkflow
         return $converter;
     }
 
+    /**
+     * @return CallbackItemConverter
+     */
     public static function getValueConverter()
     {
         $converter = new CallbackItemConverter(function ($item) {
