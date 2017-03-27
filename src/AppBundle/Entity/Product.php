@@ -180,7 +180,7 @@ class Product
      * @param \DateTime $added
      * @return Product
      */
-    public function setAdded($added)
+    public function setAdded(\DateTime $added)
     {
         $this->added = $added;
 
@@ -203,7 +203,7 @@ class Product
      * @param \DateTime $discontinued
      * @return Product
      */
-    public function setDiscontinued($discontinued)
+    public function setDiscontinued(\DateTime $discontinued)
     {
         $this->discontinued = $discontinued;
 
@@ -226,7 +226,7 @@ class Product
      * @param \DateTime $timeStamp
      * @return Product
      */
-    public function setTimeStamp($timeStamp)
+    public function setTimeStamp(\DateTime $timeStamp)
     {
         $this->timeStamp = $timeStamp;
 
