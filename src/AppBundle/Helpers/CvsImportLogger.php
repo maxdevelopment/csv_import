@@ -46,23 +46,18 @@ class CvsImportLogger
         $io->comment(count($insertErrors) + count($csvErrors) . ' line(s) have been skipped:');
 
         $io->section('Failed to read:');
-        $err_r = [];
-        foreach ($csvErrors as $error) {
-            $err_r[] = implode(' ', $error);
-        }
-        $io->listing($err_r);
+        $io->listing(array_map(function ($value) {
+            return implode(' ', $value);
+        }, $csvErrors));
 
         $io->section('Failed to insert:');
-        $err_i = [];
-        foreach ($insertErrors as $error) {
-            $err_i[] =
-                $error['productCode'] . ' ' .
-                $error['productName'] . ' ' .
-                $error['productDesc'] . ' ' .
-                $error['stock'] . ' ' .
-                $error['price']
-            ;
-        }
-        $io->listing($err_i);
+        $io->listing(array_map(function ($value) {
+            return
+                $value['productCode'] . ' ' .
+                $value['productName'] . ' ' .
+                $value['productDesc'] . ' ' .
+                $value['stock'] . ' ' .
+                $value['price'];
+        }, $insertErrors));
     }
 }
