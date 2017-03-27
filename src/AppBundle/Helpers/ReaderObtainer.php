@@ -5,7 +5,7 @@ namespace AppBundle\Helpers;
 use SplFileInfo;
 use Ddeboer\DataImport\Reader\CsvReader;
 
-class CsvValidator
+class ReaderObtainer
 {
     /**
      * Validation status
@@ -40,7 +40,7 @@ class CsvValidator
      * @param $filePath
      * @return CsvReader|null
      */
-    public function validate($filePath)
+    public function getReader($filePath)
     {
         if ($this->isExtValid($filePath)) {
             $reader = $this->initReader($filePath);

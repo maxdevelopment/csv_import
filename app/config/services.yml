@@ -7,8 +7,8 @@ services:
     #service_name:
     #    class: AppBundle\Directory\ClassName
     #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
-    app.csv_validator:
-          class: AppBundle\Helpers\CsvValidator
+    app.reader_opbtainer:
+          class: AppBundle\Helpers\ReaderObtainer
           arguments: ["%product.headers%"]
     app.product_writer:
           class: AppBundle\Writer\ProductWriter

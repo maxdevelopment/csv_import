@@ -35,10 +35,10 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
         $logger = $this->getContainer()->get('app.csv_import_logger');
         $logger->setIO($output, $input);
 
-        $csvValidator = $this->getContainer()->get('app.csv_validator');
-        $csvReader = $csvValidator->validate($input->getArgument('file_path'));
+        $readerObtainer = $this->getContainer()->get('app.reader_opbtainer');
+        $csvReader = $readerObtainer->getReader($input->getArgument('file_path'));
 
-        if ($csvValidator->isValid()) {
+        if ($readerObtainer->isValid()) {
             $isTest = $input->getOption('test');
             if ($isTest) {
                 $logger->setTestMode();
@@ -60,6 +60,6 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
             return;
         }
 
-        $output->writeln($csvValidator->getMessage());
+        $output->writeln($readerObtainer->getMessage());
     }
 }
