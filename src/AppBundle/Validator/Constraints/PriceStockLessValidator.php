@@ -21,7 +21,7 @@ class PriceStockLessValidator extends ConstraintValidator
      */
     public function validate($product, Constraint $constraint)
     {
-        if ($product->getPrice() < $constraint->minPrice &&
+        if ($product->getPrice() < $constraint->minPrice ||
             $product->getStock() < $constraint->minStock
         ) {
             $this->context->addViolation($constraint->message, ['%minPrice%' => $constraint->minPrice]);
