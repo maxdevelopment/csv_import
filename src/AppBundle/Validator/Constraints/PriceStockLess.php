@@ -50,10 +50,10 @@ class PriceStockLess extends Constraint
     public function __construct($options = null)
     {
         if (null !== $options && !is_array($options)) {
-            $options = array(
+            $options = [
                 'minPrice' => $options,
                 'minStock' => $options,
-            );
+            ];
         }
         parent::__construct($options);
         if (null === $this->minStock && null === $this->minPrice) {
@@ -62,7 +62,7 @@ class PriceStockLess extends Constraint
                     'Options "minPrice", "minStock" must be given for constraint %s',
                     __CLASS__
                 ),
-                array('minPrice', 'minStock')
+                ['minPrice', 'minStock']
             );
         }
     }
