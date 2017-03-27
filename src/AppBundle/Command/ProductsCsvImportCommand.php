@@ -37,6 +37,7 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
 
         $csvValidator = $this->getContainer()->get('app.csv_validator');
         $csvReader = $csvValidator->validate($input->getArgument('file_path'));
+
         if ($csvValidator->isValid()) {
             $isTest = $input->getOption('test');
             if ($isTest) {
@@ -56,8 +57,9 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
                 $csvReader->getErrors(),
                 $productWriter->getErrors()
             );
-        } else {
-            $output->writeln($csvValidator->getMessage());
+            return;
         }
+
+        $output->writeln($csvValidator->getMessage());
     }
 }
