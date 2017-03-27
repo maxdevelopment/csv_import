@@ -11,6 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ProductsCsvImportCommand extends ContainerAwareCommand
 {
     /**
+     * Batch size for DoctrineWriter
+     */
+    const BATCH_SIZE = 10;
+    
+    /**
      * Configuring the Command
      * @return void
      */
@@ -48,9 +53,10 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
 
             $productWriter = $this->getContainer()->get('app.product_writer');
             $productWriter->setTest($isTest);
+//            $productWriter->disableTruncate();
+            $productWriter->setBatchSize(self::BATCH_SIZE);
 
             $result = $productWorkflow->runWorkflow($productWriter);
-            $productWriter->flush();
 
             $logger->logWork(
                 $result->getSuccessCount(),
