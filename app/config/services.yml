@@ -18,4 +18,10 @@ services:
           arguments: ['@doctrine.orm.entity_manager', "%product.headers%"]
     app.csv_import_logger:
           class: AppBundle\Helpers\CvsImportLogger
+    gedmo.listener.timestampable:
+          class: Gedmo\Timestampable\TimestampableListener
+          tags:
+              - { name: doctrine.event_subscriber, connection: default }
+          calls:
+              - [ setAnnotationReader, [ '@annotation_reader' ] ]
 

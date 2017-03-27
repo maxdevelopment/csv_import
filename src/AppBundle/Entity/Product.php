@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -57,6 +58,8 @@ class Product
      * @var \DateTime
      *
      * @ORM\Column(name="dtmAdded", type="datetime", nullable=true, options={"default": 0})
+     *
+     * @Gedmo\Timestampable(on="create")
      */
     private $added;
 
@@ -70,8 +73,9 @@ class Product
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="stmTimestamp", type="datetime", options={"default": 0})
+     * @ORM\Column(name="stmTimestamp", type="datetime")
      *
+     * @Gedmo\Timestampable(on="create")
      */
     private $timeStamp;
 
@@ -90,16 +94,6 @@ class Product
      * @Assert\LessThanOrEqual(1000)
      */
     private $price;
-
-    /**
-     * Product constructor.
-     */
-    public function __construct()
-    {
-        $this->added = new \DateTime;
-        $this->timeStamp = new \DateTime;
-    }
-
 
     /**
      * Get intProductDataId
