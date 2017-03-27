@@ -42,7 +42,7 @@ class ReaderObtainer
      */
     public function getReader($filePath)
     {
-        if ($this->isExtValid($filePath)) {
+        if ($this->isExtensionValid($filePath)) {
             $reader = $this->initReader($filePath);
             if ($this->headersValidation($reader)) {
                 return $reader;
@@ -55,7 +55,7 @@ class ReaderObtainer
      * @param $filePath
      * @return bool
      */
-    public function isExtValid($filePath)
+    public function isExtensionValid($filePath)
     {
         $fileInfo = new SplFileInfo($filePath);
         if ($fileInfo->getExtension() !== 'csv') {
