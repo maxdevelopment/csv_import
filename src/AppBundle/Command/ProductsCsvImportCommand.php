@@ -39,8 +39,9 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
         $csvReader = $csvValidator->validate($input->getArgument('file_path'));
         if ($csvValidator->isValid()) {
             $isTest = $input->getOption('test');
-            if ($isTest)
+            if ($isTest) {
                 $logger->setTestMode();
+            }
             $productWorkflow = $this->getContainer()->get('app.product_workflow');
             $productWorkflow->setReader($csvReader);
 
