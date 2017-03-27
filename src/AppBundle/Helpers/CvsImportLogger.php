@@ -38,8 +38,9 @@ class CvsImportLogger
     {
         $io = $this->io;
         $io->title('Product CSV import status');
-        if ($this->test)
+        if ($this->test) {
             $io->warning('[Test Mode] without database writer');
+        }
         $io->newLine();
         $io->success(($processed + count($csvErrors)) . ' product(s) have been processed');
         $io->comment(($processed - count($insertErrors)) . ' product(s) have been correctly added');
