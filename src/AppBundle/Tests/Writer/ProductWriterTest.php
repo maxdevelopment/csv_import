@@ -26,20 +26,7 @@ class ProductWriterTest extends KernelTestCase
     {
         $productData = self::getProduct();
         $this->writer->writeItem($productData);
-        $product = $this->writer->getCorrect()['P2030'];
-        $this->assertEquals(
-            $productData['productCode'], $product->getProductCode()
-        );
-        $this->assertEquals(
-            $productData['productName'], $product->getProductName()
-        );
-        $this->assertEquals(
-            $productData['productDesc'], $product->getProductDesc()
-        );
-        $this->assertEquals($productData['price'], $product->getPrice());
-        $this->assertEquals($productData['stock'], $product->getStock());
-        $this->assertNotNull($product->getDiscontinued());
-
+        $this->assertNull($this->writer->getErrors());
     }
 
     /**
@@ -51,8 +38,6 @@ class ProductWriterTest extends KernelTestCase
         $productData = self::getProduct(false);
         $this->writer->writeItem($productData);
         $this->assertGreaterThan(0, count($this->writer->getErrors()));
-        $this->assertNull($this->writer->getCorrect());
-
     }
 
     /**
@@ -79,10 +64,11 @@ class ProductWriterTest extends KernelTestCase
             'productDesc' => 'Mega prod for user',
             'price' => '20.50',
             'stock' => '15',
-            'discontinued' => 'yes'];
+            'discontinued' => new \DateTime()];
 
-        if ($correct)
+        if ($correct) {
             return $productData;
+        }
 
         $productData['price'] = '0.0';
         $productData['stock'] = '0';

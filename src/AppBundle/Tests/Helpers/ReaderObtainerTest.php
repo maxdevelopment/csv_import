@@ -5,9 +5,9 @@ namespace AppBundle\Tests\Helpers;
 use Ddeboer\DataImport\Reader\CsvReader;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CsvValidatorTest extends KernelTestCase
+class ReaderObtainerTest extends KernelTestCase
 {
-    private $validator;
+    private $csvReader;
     private $resourcePath;
     
     /**
@@ -17,7 +17,7 @@ class CsvValidatorTest extends KernelTestCase
     public function setUp()
     {
         self::bootKernel();
-        $this->validator = self::$kernel->getContainer()->get('app.csv_validator');
+        $this->csvReader = self::$kernel->getContainer()->get('app.reader_opbtainer');
         $this->resourcePath = self::$kernel->locateResource('@AppBundle/TestResources');
     }
     
@@ -27,10 +27,10 @@ class CsvValidatorTest extends KernelTestCase
      */
     public function testCorrectCsv()
     {
-        $reader = $this->validator->validate($this->resourcePath . '/stock.csv');
+        $reader = $this->csvReader->getReader($this->resourcePath . '/stock.csv');
         $this->assertNotNull($reader);
-        $this->assertEquals($this->validator->isValid(), true);
-        $this->assertEquals($this->validator->getMessage(), '');
+        $this->assertEquals($this->csvReader->isValid(), true);
+        $this->assertEquals($this->csvReader->getMessage(), '');
         $this->assertInstanceOf(CsvReader::class, $reader);
     }
     
@@ -40,11 +40,11 @@ class CsvValidatorTest extends KernelTestCase
      */
     public function testIncorrectCsv()
     {
-        $reader = $this->validator->validate($this->resourcePath . '/error_stock.csv');
+        $reader = $this->csvReader->getReader($this->resourcePath . '/error_stock.csv');
         $this->assertNull($reader);
-        $this->assertEquals($this->validator->isValid(), false);
+        $this->assertEquals($this->csvReader->isValid(), false);
         $this->assertEquals(
-            $this->validator->getMessage(), 'csv file have incorrect headers'
+            $this->csvReader->getMessage(), 'csv file have incorrect headers'
         );
     }
     
@@ -54,11 +54,11 @@ class CsvValidatorTest extends KernelTestCase
      */
     public function testIncorrectExtension()
     {
-        $reader = $this->validator->validate($this->resourcePath . '/text.txt');
+        $reader = $this->csvReader->getReader($this->resourcePath . '/text.txt');
         $this->assertNull($reader);
-        $this->assertEquals($this->validator->isValid(), false);
+        $this->assertEquals($this->csvReader->isValid(), false);
         $this->assertEquals(
-            $this->validator->getMessage(), 'incorrect file extension'
+            $this->csvReader->getMessage(), 'incorrect file extension'
         );
     }
 }
