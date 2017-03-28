@@ -53,7 +53,7 @@ class ProductsCsvImportCommand extends ContainerAwareCommand
 
             $productWriter = $this->getContainer()->get('app.product_writer');
             $productWriter->setTest($isTest);
-//            $productWriter->disableTruncate();
+            $productWriter->disableTruncate();
             $productWriter->setBatchSize(self::BATCH_SIZE);
 
             $result = $productWorkflow->runWorkflow($productWriter);

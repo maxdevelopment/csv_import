@@ -21,7 +21,7 @@ class ProductWriter extends DoctrineWriter
      */
     public function __construct(EntityManager $entityManager, $entityName, $validator)
     {
-        parent::__construct($entityManager, $entityName);
+        parent::__construct($entityManager, $entityName, 'productCode');
         $this->entityManager = $entityManager;
         $this->entityName = $entityName;
         $this->validator = $validator;

@@ -43,7 +43,7 @@ class CvsImportLogger
         }
         $io->newLine();
         $io->success(($processed + count($csvErrors)) . ' product(s) have been processed');
-        $io->comment(($processed - count($insertErrors)) . ' product(s) have been correctly added');
+        $io->comment(($processed - count($insertErrors)) . ' product(s) have been correctly added/updated');
         $io->comment(count($insertErrors) + count($csvErrors) . ' line(s) have been skipped:');
 
         $io->section('Failed to read:');
