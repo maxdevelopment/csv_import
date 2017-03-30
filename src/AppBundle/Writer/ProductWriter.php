@@ -52,7 +52,7 @@ class ProductWriter extends DoctrineWriter
         $this->loadAssociationObjectsToEntity($item, $entity);
         $this->updateEntity($item, $entity);
         $errors = $this->validator->validate($entity);
-        if (!$errors->has(0)) {
+        if (!$errors->has(0) && !$this->isTest()) {
             $this->counter++;
             $this->entityManager->persist($entity);
             if (($this->counter % $this->batchSize) == 0 && !$this->isTest()) {
